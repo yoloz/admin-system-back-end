@@ -1,0 +1,32 @@
+server:
+  port: 8080
+#  servlet:
+#    context-path: /dev
+
+spring:
+  main:
+    banner-mode: off
+  mvc:
+    static-path-pattern: /**
+  jackson:
+    time-zone: GMT+8
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/vte?serverTimezone=GMT%2B8&useSSL=false
+    username: test
+    password: test
+  cache:
+    caffeine:
+      spec:
+        expireAfterAccess: 600s
+
+mybatis-flex:
+  global-config:
+    print-banner: false
+
+jwt:
+  secret: 789
+  expireTime: 24   #hour
+
+logging:
+  config: config/logback.xml

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <contextName>trust-management-system</contextName>
+    <property name="log.rollFile" value="logs"/>
+    <property name="log.charset" value="utf-8"/>
+    <property name="log.pattern"
+              value="%contextName- %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{36}) - %msg%n"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+            <charset>${log.charset}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 日志文件输出的文件名 -->
+        <File>${log.rollFile}/app.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 每日生成日志文件或日志文件大小超出限制后输出的文件名模板 -->
+            <fileNamePattern>${log.rollFile}/app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 日志文件保留天数 -->
+            <maxHistory>5</maxHistory>
+            <!-- 日志文件最大大小 -->
+            <maxFileSize>512MB</maxFileSize>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%-5level：级别从左显示5个字符宽度，%t表示线程名，%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level ${PID:-} --- [%t] %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 默认日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+<!--        <appender-ref ref="RollingFile"/>-->
+    </root>
+
+</configuration>
