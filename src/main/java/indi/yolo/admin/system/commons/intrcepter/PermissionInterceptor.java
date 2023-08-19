@@ -51,7 +51,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 response.sendError(ResultEnum.NO_PERMISSION.getCode(), "无权限操作,请联系管理员");
                 return false;
             }
-            return true;
         }
         return true;
     }

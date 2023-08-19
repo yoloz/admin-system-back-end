@@ -14,7 +14,7 @@ public class MenuDTO extends BaseDTO {
     private String redirect;
     private String component;
     private Integer pid;
-    private Integer type;// 0:目录 1:菜单 2:按钮
+    private Integer type; // 0:目录 1:菜单 2:按钮
     private String icon;
     private boolean hidden;
     private Integer order;

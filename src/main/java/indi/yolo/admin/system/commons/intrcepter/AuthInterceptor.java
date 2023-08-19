@@ -44,15 +44,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         } catch (SignatureGenerationException signatureGenerationException) {
 //            throw new UserAuthFailException("Token签名错误");
             response.sendError(ResultEnum.RE_LOGIN.getCode(), "Token签名错误");
-            return false;
         } catch (TokenExpiredException tokenExpiredException) {
 //            throw new UserAuthFailException("Token已过期");
             response.sendError(ResultEnum.RE_LOGIN.getCode(), "Token已过期");
-            return false;
         } catch (AlgorithmMismatchException algorithmMismatchException) {
 //            throw new UserAuthFailException("Token校验加密方法无效");
             response.sendError(ResultEnum.RE_LOGIN.getCode(), "Token校验无效");
-            return false;
         }
+        return false;
     }
 }

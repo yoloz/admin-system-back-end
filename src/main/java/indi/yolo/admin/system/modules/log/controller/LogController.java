@@ -32,7 +32,9 @@ public class LogController {
     @Log("操作日志详情")
     @PostMapping(value = "/exception")
     public RestResult<Object> getErrDetail(@RequestBody Map<String, Long> id) {
-        if (id == null || id.isEmpty()) return RestResult.error("日志ID不存在!");
+        if (id == null || id.isEmpty()) {
+            return RestResult.error("日志ID不存在!");
+        }
         return RestResult.success(logService.getErrDetail(id.get("id")));
     }
 

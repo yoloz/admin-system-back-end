@@ -40,7 +40,9 @@ public class RoleMenuRelationServiceImpl extends ServiceImpl<RoleMenuRelationMap
 
     @Override
     public Collection<Integer> getMenuIdsByRole(Integer roleId) {
-        QueryWrapper sql = QueryWrapper.create().select(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID).from(RoleMenuRelationTableDef.ROLE_MENU_RELATION)
+        QueryWrapper sql = QueryWrapper.create()
+                .select(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID)
+                .from(RoleMenuRelationTableDef.ROLE_MENU_RELATION)
                 .where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.eq(roleId));
         return roleMenuRelationMapper.selectListByQueryAs(sql, Integer.class);
     }

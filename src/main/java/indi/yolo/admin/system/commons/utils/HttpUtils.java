@@ -64,16 +64,27 @@ public class HttpUtils {
     }
 
     public static long ipToLong(String ip) {
-        if (ip == null || ip.isEmpty()) return 0;
+        if (ip == null || ip.isEmpty()) {
+            return 0;
+        }
         String[] s = ip.split("\\.");
-        if (s.length != 4) return 0;
-        return (Long.parseLong(s[0]) << 24) + (Long.parseLong(s[1]) << 16) +
-                (Long.parseLong(s[2]) << 8) + Long.parseLong(s[3]);
+        if (s.length != 4) {
+            return 0;
+        }
+        return (Long.parseLong(s[0]) << 24)
+                + (Long.parseLong(s[1]) << 16)
+                + (Long.parseLong(s[2]) << 8)
+                + Long.parseLong(s[3]);
     }
 
     public static String longToIP(long ip) {
-        return (ip >>> 24) + "." + ((ip & 0x00FFFFFF) >>> 16) + "." +
-                ((ip & 0x0000FFFF) >>> 8) + "." + (ip & 0x000000FF);
+        return (ip >>> 24)
+                + "."
+                + ((ip & 0x00FFFFFF) >>> 16)
+                + "."
+                + ((ip & 0x0000FFFF) >>> 8)
+                + "."
+                + (ip & 0x000000FF);
     }
 
     public static String getCurrentBrowser() {
@@ -116,7 +127,7 @@ public class HttpUtils {
     }
 
     // java.lang.IllegalStateException: getWriter() has already been called for this response
-    public static void RestResponseJson(HttpServletResponse response, Object result) {
+    public static void restResponseJson(HttpServletResponse response, Object result) {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         try (ServletOutputStream outputStream = response.getOutputStream()) {

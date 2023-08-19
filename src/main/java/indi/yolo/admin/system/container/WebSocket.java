@@ -44,7 +44,9 @@ public class WebSocket {
     @OnClose
     public void onClose() {
         try {
-            if (session != null) session.close();
+            if (session != null) {
+                session.close();
+            }
         } catch (IOException e) {
             log.warn("close ws session fail:" + e.getMessage());
         }
@@ -53,7 +55,9 @@ public class WebSocket {
     //收到客户端消息
     @OnMessage
     public void onMessage(String message) {
-        if (StringUtils.isEmpty(message)) return;
+        if (StringUtils.isEmpty(message)) {
+            return;
+        }
         if (message.startsWith("routerMenu")) {
             String[] s = message.split("_");
             Collection<MenuRouter> routerMenus = menuService.getRouterMenu(Integer.parseInt(s[1]));

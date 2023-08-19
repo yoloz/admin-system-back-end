@@ -45,7 +45,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper sql = QueryWrapper.create()
                 .select(UserTableDef.USER.ALL_COLUMNS, RoleTableDef.ROLE.ID, RoleTableDef.ROLE.NAME, RoleTableDef.ROLE.LEVEL)
                 .from(UserTableDef.USER.as("u"))
-                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur").on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur")
+                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.USERNAME.like(userDto.getUsername())).and(UserTableDef.USER.USERNAME.eq(userDto.getEnable()))
                 .leftJoin(RoleTableDef.ROLE).as("r").on(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         return userMapper.paginateAs(Page.of(userDto.getPageNumber(), userDto.getPageSize(), userDto.getTotalRow()), sql, UserVO.class);
@@ -104,12 +105,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Optional<Row> getUserInfo(Integer userId) {
         QueryWrapper sql = QueryWrapper.create()
-                .select(UserTableDef.USER.ID, UserTableDef.USER.USERNAME, UserTableDef.USER.NICKNAME, UserTableDef.USER.PHONE, UserTableDef.USER.EMAIL, UserTableDef.USER.ENABLE, RoleTableDef.ROLE.LEVEL)
-                .from(UserTableDef.USER.as("u"))
-                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur").on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID)).and(UserTableDef.USER.ID.eq(userId))
-                .leftJoin(RoleTableDef.ROLE).as("r").on(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .select(UserTableDef.USER.ID, UserTableDef.USER.USERNAME, UserTableDef.USER.NICKNAME,
+                        UserTableDef.USER.PHONE, UserTableDef.USER.EMAIL, UserTableDef.USER.ENABLE,
+                        RoleTableDef.ROLE.LEVEL).from(UserTableDef.USER.as("u"))
+                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur")
+                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                .and(UserTableDef.USER.ID.eq(userId))
+                .leftJoin(RoleTableDef.ROLE).as("r")
+                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         List<Row> list = Db.selectListByQuery(sql);
-        if (list == null || list.isEmpty()) return Optional.empty();
+        if (list == null || list.isEmpty()) {
+            return Optional.empty();
+        }
         return list.stream().min((o1, o2) -> {
             int x = o1.getInt("level");
             int y = o2.getInt("level");
@@ -119,12 +126,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public Collection<String> getPermission(Integer userId) {
-        QueryWrapper sql = QueryWrapper.create().select(QueryMethods.distinct(MenuTableDef.MENU.PERMISSION)).from(MenuTableDef.MENU)
+        QueryWrapper sql = QueryWrapper.create().select(QueryMethods.distinct(MenuTableDef.MENU.PERMISSION))
+                .from(MenuTableDef.MENU)
                 .where(MenuTableDef.MENU.ID.in(
-                        select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID)).from(RoleMenuRelationTableDef.ROLE_MENU_RELATION).where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
-                                QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID).from(UserRoleRelationTableDef.USER_ROLE_RELATION)
-                                        .where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
-                        ))
+                        select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID))
+                                .from(RoleMenuRelationTableDef.ROLE_MENU_RELATION)
+                                .where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
+                                        QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID)
+                                                .from(UserRoleRelationTableDef.USER_ROLE_RELATION)
+                                                .where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
+                                ))
                 ));
         return userMapper.selectListByQueryAs(sql, String.class);
     }

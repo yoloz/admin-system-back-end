@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class MapCache {
 
-    private final Map<String, CacheValue> CACHE_MAP = new ConcurrentHashMap<>();
+    private final Map<String, CacheValue> map = new ConcurrentHashMap<>();
 
     private static class CacheValue {
         long expireTime;
@@ -37,38 +37,44 @@ public class MapCache {
         if (time > 0) {
             expireTime = TimeUnit.MILLISECONDS.convert(time, timeUnit) + System.currentTimeMillis();
         }
-        CacheValue cacheValue = CACHE_MAP.get(key);
+        CacheValue cacheValue = map.get(key);
         if (cacheValue == null) {
             cacheValue = new CacheValue(expireTime, obj);
         } else {
             cacheValue.expireTime = expireTime;
             cacheValue.object = obj;
         }
-        CACHE_MAP.put(key, cacheValue);
+        map.put(key, cacheValue);
     }
 
     public Optional<Object> get(String key) {
-        if (key == null) return Optional.empty();
+        if (key == null) {
+            return Optional.empty();
+        }
         triggerExpireTime();
-        CacheValue value = CACHE_MAP.get(key);
-        if (value == null) return Optional.empty();
+        CacheValue value = map.get(key);
+        if (value == null) {
+            return Optional.empty();
+        }
         return Optional.of(value.object);
     }
 
     public void clear() {
-        CACHE_MAP.clear();
+        map.clear();
     }
 
     public void remove(String key) {
-        CACHE_MAP.remove(key);
+        map.remove(key);
     }
 
     //添加触发整个缓存清理过期数据
     private void triggerExpireTime() {
         long current = System.currentTimeMillis();
-        for (Map.Entry<String, CacheValue> entry : CACHE_MAP.entrySet()) {
+        for (Map.Entry<String, CacheValue> entry : map.entrySet()) {
             long expireTime = entry.getValue().expireTime;
-            if (expireTime == 0L) continue;
+            if (expireTime == 0L) {
+                continue;
+            }
             if (expireTime < current) {
                 log.debug("map cache expire:" + entry.getKey());
                 remove(entry.getKey());

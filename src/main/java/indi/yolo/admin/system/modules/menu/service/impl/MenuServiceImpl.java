@@ -56,15 +56,24 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public Collection<MenuRouter> getRouterMenu(Integer userId) {
-        QueryWrapper sql = QueryWrapper.create().select(MenuTableDef.MENU.DEFAULT_COLUMNS).from(MenuTableDef.MENU).where(MenuTableDef.MENU.ID.in(
-                select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID)).from(RoleMenuRelationTableDef.ROLE_MENU_RELATION).where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
-                        QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID).from(UserRoleRelationTableDef.USER_ROLE_RELATION).where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
-                ))
-        )).and(MenuTableDef.MENU.TYPE.ne(2)).orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
+        QueryWrapper sql = QueryWrapper.create()
+                .select(MenuTableDef.MENU.DEFAULT_COLUMNS)
+                .from(MenuTableDef.MENU)
+                .where(MenuTableDef.MENU.ID.in(select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID))
+                        .from(RoleMenuRelationTableDef.ROLE_MENU_RELATION).where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
+                                QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID)
+                                        .from(UserRoleRelationTableDef.USER_ROLE_RELATION)
+                                        .where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
+                        ))
+                )).and(MenuTableDef.MENU.TYPE.ne(2)).orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
         List<Menu> menus = menuMapper.selectListByQuery(sql);
         List<MenuRouter> routerMenus = new ArrayList<>();
         for (Menu menu : menus) {
-            packRouterMenu(routerMenus, menu);
+            if (menu.getPid() == null || menu.getPid() == 0) {
+                routerMenus.add(menuMapStructRouter.toRouter(menu));
+            } else {
+                packRouterMenu(routerMenus, menu);
+            }
         }
         return routerMenus;
     }
@@ -88,21 +97,25 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
 
     @Override
     public Collection<MenuVO> selectOptions() {
-        QueryWrapper sql = QueryWrapper.create().select(MenuTableDef.MENU.ID, MenuTableDef.MENU.NAME, MenuTableDef.MENU.PID)
-                .from(MenuTableDef.MENU).where(MenuTableDef.MENU.TYPE.ne(2)).and(MenuTableDef.MENU.HIDDEN.eq(false)).orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
+        QueryWrapper sql = QueryWrapper.create()
+                .select(MenuTableDef.MENU.ID, MenuTableDef.MENU.NAME, MenuTableDef.MENU.PID)
+                .from(MenuTableDef.MENU)
+                .where(MenuTableDef.MENU.TYPE.ne(2))
+                .and(MenuTableDef.MENU.HIDDEN.eq(false))
+                .orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
         List<Menu> menus = menuMapper.selectListByQuery(sql);
         List<MenuVO> menuVOS = new ArrayList<>();
         for (Menu menu : menus) {
-            packMenuVO(menuVOS, menu);
+            if (menu.getPid() == null || menu.getPid() == 0) {
+                menuVOS.add(menuMapStructVO.toVo(menu));
+            } else {
+                packMenuVO(menuVOS, menu);
+            }
         }
         return menuVOS;
     }
 
     private void packMenuVO(Collection<MenuVO> menuVOS, Menu menu) {
-        if (menu.getPid() == null || menu.getPid() == 0) {
-            menuVOS.add(menuMapStructVO.toVo(menu));
-            return;
-        }
         for (MenuVO vo : menuVOS) {
             if (vo.getId().equals(menu.getPid())) {
                 if (vo.getChildren() == null) {
@@ -117,10 +130,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     private void packRouterMenu(Collection<MenuRouter> routerMenus, Menu menu) {
-        if (menu.getPid() == null || menu.getPid() == 0) {
-            routerMenus.add(menuMapStructRouter.toRouter(menu));
-            return;
-        }
         for (MenuRouter router : routerMenus) {
             if (router.getId().equals(menu.getPid())) {
                 if (router.getChildren() == null) {

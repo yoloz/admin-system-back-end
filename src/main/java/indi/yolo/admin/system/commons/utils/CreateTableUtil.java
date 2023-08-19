@@ -21,25 +21,24 @@ import java.util.*;
 @Slf4j
 public class CreateTableUtil {
 
-    public final Map<String, String> TYPES = new HashMap<>();
-    public final String DefaultType = "VARCHAR(255)";
+    private final Map<String, String> types = new HashMap<>();
 
     public CreateTableUtil() {
-        TYPES.put("int", "INT UNSIGNED");
-        TYPES.put("java.lang.Integer", "INTEGER UNSIGNED");
-        TYPES.put("long", "BIGINT UNSIGNED");
-        TYPES.put("java.lang.Long", "BIGINT UNSIGNED");
-        TYPES.put("float", "FLOAT");
-        TYPES.put("java.lang.Float", "FLOAT");
-        TYPES.put("double", "DOUBLE");
-        TYPES.put("java.lang.Double", "DOUBLE");
-        TYPES.put("char", "CHAR");
-        TYPES.put("java.lang.Character", "CHAR");
-        TYPES.put("java.util.Date", "DATETIME");
-        TYPES.put("java.sql.Timestamp", "TIMESTAMP");
-        TYPES.put("java.math.BigDecimal", "DECIMAL");
-        TYPES.put("boolean", "TINYINT UNSIGNED");
-        TYPES.put("java.lang.Boolean", "TINYINT UNSIGNED");
+        types.put("int", "INT UNSIGNED");
+        types.put("java.lang.Integer", "INTEGER UNSIGNED");
+        types.put("long", "BIGINT UNSIGNED");
+        types.put("java.lang.Long", "BIGINT UNSIGNED");
+        types.put("float", "FLOAT");
+        types.put("java.lang.Float", "FLOAT");
+        types.put("double", "DOUBLE");
+        types.put("java.lang.Double", "DOUBLE");
+        types.put("char", "CHAR");
+        types.put("java.lang.Character", "CHAR");
+        types.put("java.util.Date", "DATETIME");
+        types.put("java.sql.Timestamp", "TIMESTAMP");
+        types.put("java.math.BigDecimal", "DECIMAL");
+        types.put("boolean", "TINYINT UNSIGNED");
+        types.put("java.lang.Boolean", "TINYINT UNSIGNED");
     }
 
     private record ColumnDef(String name, String type, boolean isPrimary) {
@@ -78,7 +77,9 @@ public class CreateTableUtil {
                 return Collections.emptyList();
             }
             File[] files = file.listFiles((pathname) -> (file.isDirectory()) || (file.getName().endsWith(".java")));
-            if (files == null) continue;
+            if (files == null) {
+                continue;
+            }
             for (File f : files) {
                 if (f.isDirectory()) {
                     stack.push(f.getPath());
@@ -148,7 +149,9 @@ public class CreateTableUtil {
             String colName = StrUtil.camelToUnderline(field.getName());
             Column colAnno = field.getAnnotation(Column.class);
             if (colAnno != null) {
-                if (colAnno.ignore()) continue;
+                if (colAnno.ignore()) {
+                    continue;
+                }
                 if (!StringUtils.isEmpty(colAnno.value())) {
                     colName = colAnno.value();
                 }
@@ -168,7 +171,7 @@ public class CreateTableUtil {
         for (ColumnDef column : columns) {
             sb.append("`").append(column.name).append("`");
             sb.append('\t');
-            sb.append(TYPES.getOrDefault(column.type, DefaultType));
+            sb.append(types.getOrDefault(column.type, "VARCHAR(255)"));
             if (column.isPrimary) {
                 sb.append("\t");
                 sb.append("primary key");

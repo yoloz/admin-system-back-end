@@ -9,7 +9,7 @@ import indi.yolo.admin.system.modules.user.entity.User;
  */
 public interface ILoginService extends IService<User> {
 
-    Integer login(String username,String password);
+    Integer login(String username, String password);
 
     @SuppressWarnings("all")
     boolean updateLoginInfo(String loginIp, Integer userId);
