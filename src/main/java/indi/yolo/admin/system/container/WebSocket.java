@@ -73,7 +73,9 @@ public class WebSocket {
     public void onError(Session session, Throwable e) {
         log.error("WS Connect Error:" + e.getMessage(), e);
         try {
-            session.close();
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         } catch (IOException ignore) {
         }
     }

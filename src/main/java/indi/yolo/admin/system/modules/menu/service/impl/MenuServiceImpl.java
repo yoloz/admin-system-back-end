@@ -49,7 +49,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         List<Menu> menus = menuMapper.selectListByQuery(sql);
         List<MenuVO> menuVOS = new ArrayList<>();
         for (Menu menu : menus) {
-            packMenuVO(menuVOS, menu);
+            if (menu.getPid() == null || menu.getPid() == 0) {
+                menuVOS.add(menuMapStructVO.toVo(menu));
+            } else {
+                packMenuVO(menuVOS, menu);
+            }
         }
         return menuVOS;
     }
