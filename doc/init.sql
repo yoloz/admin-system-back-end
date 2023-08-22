@@ -32,7 +32,7 @@ CREATE TABLE `log` (
   `exception` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '异常详情',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `menu` (
   `redirect` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '重定向地址',
   `component` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '文件路径',
   `create_user` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '创建者',
-  `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
+  `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_user` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '修改者',
   `update_time` timestamp NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
@@ -77,7 +77,29 @@ CREATE TABLE `menu` (
 
 LOCK TABLES `menu` WRITE;
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
-INSERT INTO `menu` VALUES (1,0,0,NULL,1,1,'','首页','/','/sys','layouts/index.vue','admin',NULL,'admin','2023-08-18 08:59:20'),(2,0,0,'icon-logs',0,2,'','日志管理','/logs','/logs/right-log.vue','layouts/index.vue','admin',NULL,'admin','2023-08-18 09:12:33'),(3,2,1,'icon-approval',0,1,'log:right','操作日志','right-log.vue',NULL,'logs/right-log.vue','admin',NULL,NULL,NULL),(4,2,1,'icon-Algorithm',0,2,'log:error','异常日志','error-log.vue',NULL,'logs/error-log.vue','admin',NULL,NULL,NULL),(5,0,0,'icon-disposition',0,3,'','系统管理','/sys','/sys/users','layouts/index.vue','admin',NULL,'admin','2023-08-18 09:12:44'),(6,5,1,'icon-usernav',0,1,'user:list','用户管理','users',NULL,'users/index.vue','admin',NULL,NULL,NULL),(7,6,2,NULL,0,1,'user:add','创建用户','',NULL,'','admin',NULL,NULL,NULL),(8,6,2,NULL,0,2,'user:edit','编辑用户','',NULL,'','admin',NULL,NULL,NULL),(9,6,2,NULL,0,3,'user:delete','删除用户','',NULL,'','admin',NULL,'admin','2023-08-18 09:03:54'),(10,6,2,NULL,0,4,'user:pwd','重置密码','',NULL,'','admin',NULL,NULL,NULL),(11,6,2,NULL,0,5,'user:enable','用户启停','',NULL,'','admin',NULL,'admin','2023-08-18 09:06:28'),(12,6,2,NULL,0,6,'user:role','编辑用户角色','',NULL,'','admin',NULL,'admin','2023-08-18 09:27:04'),(13,5,1,'icon-roleSwitch',0,2,'role:list','角色管理','roles',NULL,'roles/index.vue','admin',NULL,NULL,NULL),(14,13,2,NULL,0,1,'role:add','创建角色','',NULL,'','admin',NULL,NULL,NULL),(15,13,2,NULL,0,2,'role:edit','编辑角色','',NULL,'','admin',NULL,NULL,NULL),(16,13,2,NULL,0,3,'role:delete','删除角色','',NULL,'','admin',NULL,NULL,NULL),(17,13,2,NULL,0,4,'role:user','编辑角色用户','',NULL,'','admin',NULL,'admin','2023-08-18 09:13:12'),(18,13,2,NULL,0,5,'role:menu','编辑角色菜单','',NULL,'','admin',NULL,'admin','2023-08-18 09:13:03'),(19,5,1,'icon-menu',0,3,'menu:list','菜单管理','menus',NULL,'menus/index.vue','admin',NULL,NULL,NULL),(20,19,2,NULL,0,1,'menu:add','新增菜单','',NULL,'','admin',NULL,NULL,NULL),(21,19,2,NULL,0,2,'menu:edit','编辑菜单','',NULL,'','admin',NULL,NULL,NULL),(22,19,2,NULL,0,3,'menu:delete','删除菜单','',NULL,'','admin',NULL,NULL,NULL);
+INSERT INTO `menu`(`id`,`pid`,`type`,`icon`,`hidden`,`order`,`permission`,`name`,`path`,`redirect`,`component`) VALUES
+(1,0,0,NULL,1,1,'','首页','/','/sys','layouts/index.vue'),
+(2,0,0,'icon-logs',0,2,'','日志管理','/logs','/logs/right-log','layouts/index.vue'),
+(3,2,1,'icon-approval',0,1,'log:right','操作日志','right-log',NULL,'logs/right-log.vue'),
+(4,2,1,'icon-Algorithm',0,2,'log:error','异常日志','error-log',NULL,'logs/error-log.vue'),
+(5,0,0,'icon-disposition',0,3,'','系统管理','/sys','/sys/users','layouts/index.vue'),
+(6,5,1,'icon-usernav',0,1,'user:list','用户管理','users',NULL,'users/index.vue'),
+(7,6,2,NULL,0,1,'user:add','创建用户','',NULL,''),
+(8,6,2,NULL,0,2,'user:edit','编辑用户','',NULL,''),
+(9,6,2,NULL,0,3,'user:delete','删除用户','',NULL,''),
+(10,6,2,NULL,0,4,'user:pwd','重置密码','',NULL,''),
+(11,6,2,NULL,0,5,'user:enable','用户启停','',NULL,''),
+(12,6,2,NULL,0,6,'user:role','编辑用户角色','',NULL,''),
+(13,5,1,'icon-roleSwitch',0,2,'role:list','角色管理','roles',NULL,'roles/index.vue'),
+(14,13,2,NULL,0,1,'role:add','创建角色','',NULL,''),
+(15,13,2,NULL,0,2,'role:edit','编辑角色','',NULL,''),
+(16,13,2,NULL,0,3,'role:delete','删除角色','',NULL,''),
+(17,13,2,NULL,0,4,'role:user','编辑角色用户','',NULL,''),
+(18,13,2,NULL,0,5,'role:menu','编辑角色菜单','',NULL,''),
+(19,5,1,'icon-menu',0,3,'menu:list','菜单管理','menus',NULL,'menus/index.vue'),
+(20,19,2,NULL,0,1,'menu:add','新增菜单','',NULL,''),
+(21,19,2,NULL,0,2,'menu:edit','编辑菜单','',NULL,''),
+(22,19,2,NULL,0,3,'menu:delete','删除菜单','',NULL,'');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,7 +130,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role`(`name`,`level`,`builtin`,`desc`) VALUES ('系统管理员',0,1,'系统初始角色');
+INSERT INTO `role`(`id`,`name`,`level`,`builtin`,`desc`) VALUES (1,'系统管理员',0,1,'系统初始角色');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,12 +189,13 @@ CREATE TABLE `user` (
 
 --
 -- Dumping data for table `user`
--- admin/test
+-- test/test
 --
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user`(`nickname`,`username`,`password`,`builtin`,) VALUES ('初始用户','admin','098f6bcd4621d373cade4e832627b4f6',1);
+INSERT INTO `user`(`id`,`nickname`,`username`,`password`,`enable`,`builtin`,`phone`,`email`) VALUES
+(1,'初始用户','test','098f6bcd4621d373cade4e832627b4f6',1,1,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -211,3 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
