@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+//import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -45,11 +46,23 @@ public class WebRequestConfigure implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
+//    添加静态资源 resources/static/
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/static/**")
+//                .addResourceLocations("classpath:/static/");
+//    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 多个拦截器可以设置order顺序，值越小，preHandle越先执行，postHandle和afterCompletion越后执行
         // order默认的值是0，如果只添加一个拦截器，可以不显示设置order的值
-        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**").excludePathPatterns("/login", "/captchaImage", "/logout").order(1);
+        registry.addInterceptor(jwtInterceptor).addPathPatterns("/**")
+                .excludePathPatterns("/login", "/captchaImage", "/logout")
+//  添加静态资源过滤
+//                .excludePathPatterns("/login", "/captchaImage", "/logout", "/error",
+//                        "/", "/index.html", "/favicon.ico", "/assets/**")
+                .order(1);
         registry.addInterceptor(permissionInterceptor).addPathPatterns("/**").order(2);
     }
 }
