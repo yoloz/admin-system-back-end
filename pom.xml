@@ -146,7 +146,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <includeSystemScope>true</includeSystemScope>
-                    <excludeGroupIds>org.projectlombok,org.apache.logging.log4j,org.mapstruct</excludeGroupIds>
+                    <!--yauua.jar need org/apache/logging/log4j/LogManager-->
+                    <excludeGroupIds>org.projectlombok,org.mapstruct</excludeGroupIds>
                 </configuration>
             </plugin>
             <plugin>

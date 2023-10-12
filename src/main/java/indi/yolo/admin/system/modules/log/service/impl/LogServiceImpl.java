@@ -32,7 +32,8 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements IL
                 .and(SYS_LOG.USERNAME.like(logDto.getUsername()))
                 .and(SYS_LOG.REQUEST_IP.like(logDto.getRequestIp()))
                 .and(SYS_LOG.CREATE_TIME.ge(logDto.getBeginTime()))
-                .and(SYS_LOG.CREATE_TIME.le(logDto.getEndTime()));
+                .and(SYS_LOG.CREATE_TIME.le(logDto.getEndTime()))
+                .orderBy(SYS_LOG.CREATE_TIME.desc());
         return page(Page.of(logDto.getPageNumber(), logDto.getPageSize(), logDto.getTotalRow()), sql);
     }
 
@@ -47,7 +48,10 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements IL
 
     @Override
     public String getErrDetail(Long id) {
-        QueryWrapper sql = QueryWrapper.create().select(SYS_LOG.EXCEPTION).where(SYS_LOG.ID.eq(id));
+        QueryWrapper sql = QueryWrapper.create()
+                .select(SYS_LOG.EXCEPTION)
+                .where(SYS_LOG.ID.eq(id))
+                .orderBy(SYS_LOG.CREATE_TIME.desc());
         return getOne(sql).getException();
     }
 
