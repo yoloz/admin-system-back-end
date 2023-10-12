@@ -1,6 +1,9 @@
 package indi.yolo.admin.system.modules.user.controller;
 
-import com.wf.captcha.ArithmeticCaptcha;
+import cn.hutool.captcha.CaptchaUtil;
+import cn.hutool.captcha.ShearCaptcha;
+import cn.hutool.captcha.generator.MathGenerator;
+import cn.hutool.core.math.Calculator;
 import indi.yolo.admin.system.commons.config.UserContextManager;
 import indi.yolo.admin.system.commons.entity.rest.RestResult;
 import indi.yolo.admin.system.commons.config.MapCache;
@@ -66,13 +69,15 @@ public class LoginController {
 
     @GetMapping("/captchaImage")
     public RestResult<Object> captcha() {
-        ArithmeticCaptcha captcha = new ArithmeticCaptcha(130, 48);
+        ShearCaptcha captcha = CaptchaUtil.createShearCaptcha(130, 48, 4, 4);
+        //验证码内容为四则运算方式
+        captcha.setGenerator(new MathGenerator(1));
         String key = UUID.randomUUID().toString();
-        String result = captcha.text(); //获取运算的结果
-        mapCache.put(key, result, 1, TimeUnit.MINUTES);
+        int calculateResult = (int) Calculator.conversion(captcha.getCode());
+        mapCache.put(key, calculateResult, 1, TimeUnit.MINUTES);
         Map<String, String> map = new HashMap<>(2);
         map.put("uuid", key);
-        map.put("image", captcha.toBase64());
+        map.put("image", "data:image/png;base64," + captcha.getImageBase64());
         return RestResult.success(map);
     }
 }

@@ -1,5 +1,6 @@
 package indi.yolo.admin.system.commons.utils;
 
+import cn.hutool.crypto.SecureUtil;
 import net.dreamlu.mica.core.utils.HexUtil;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,12 @@ class UtilsTest {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    void encrypt(){
+        byte[] keys = "0123456789ABHAEQ".getBytes(StandardCharsets.UTF_8);
+        System.out.println(SecureUtil.aes(keys).encryptHex("test"));
     }
 
 }

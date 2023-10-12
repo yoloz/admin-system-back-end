@@ -13,8 +13,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/test?serverTimezone=GMT%2B8&useSSL=false
-    username: test
-    password: test
+    # test/test
+    username: 6b90f65d15c04980ce951b9d914339ff
+    password: 6b90f65d15c04980ce951b9d914339ff
   cache:
     caffeine:
       spec:
