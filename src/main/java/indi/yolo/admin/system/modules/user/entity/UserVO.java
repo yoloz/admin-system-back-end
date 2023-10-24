@@ -21,5 +21,9 @@ public class UserVO {
     private String email;
     private String loginIp;
     private Timestamp loginTime;
+    private String createUser;
+    private Timestamp createTime;
+    private String updateUser;
+    private Timestamp updateTime;
     private Collection<Role> roles;
 }
