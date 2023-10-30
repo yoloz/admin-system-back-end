@@ -1,11 +1,11 @@
-package indi.yolo.admin.system.modules.role.service.impl;
+package indi.yolo.admin.system.modules.rolemenurel.service.impl;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import indi.yolo.admin.system.modules.role.entity.RoleMenuRelation;
-import indi.yolo.admin.system.modules.role.mapper.RoleMenuRelationMapper;
-import indi.yolo.admin.system.modules.role.service.IRoleMenuRelationService;
-import indi.yolo.admin.system.modules.role.entity.table.RoleMenuRelationTableDef;
+import indi.yolo.admin.system.modules.rolemenurel.entity.RoleMenuRelation;
+import indi.yolo.admin.system.modules.rolemenurel.entity.table.RoleMenuRelationTableDef;
+import indi.yolo.admin.system.modules.rolemenurel.mapper.RoleMenuRelationMapper;
+import indi.yolo.admin.system.modules.rolemenurel.service.IRoleMenuRelationService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

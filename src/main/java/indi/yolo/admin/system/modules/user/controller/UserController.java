@@ -3,15 +3,15 @@ package indi.yolo.admin.system.modules.user.controller;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.row.Row;
 import indi.yolo.admin.system.commons.config.UserContextManager;
+import indi.yolo.admin.system.commons.entity.Permission;
 import indi.yolo.admin.system.commons.entity.rest.RestResult;
 import indi.yolo.admin.system.commons.entity.rest.ResultEnum;
 import indi.yolo.admin.system.modules.log.annotation.Log;
-import indi.yolo.admin.system.commons.entity.Permission;
 import indi.yolo.admin.system.modules.role.service.IRoleService;
+import indi.yolo.admin.system.modules.roleuserrel.service.IRoleUserRelationService;
 import indi.yolo.admin.system.modules.user.entity.PwdDto;
 import indi.yolo.admin.system.modules.user.entity.UserDTO;
 import indi.yolo.admin.system.modules.user.entity.UserVO;
-import indi.yolo.admin.system.modules.user.service.IUserRoleRelationService;
 import indi.yolo.admin.system.modules.user.service.IUserService;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +32,7 @@ public class UserController {
     @Resource
     private IUserService userService;
     @Resource
-    private IUserRoleRelationService userRoleRelationService;
+    private IRoleUserRelationService roleUserRelationService;
     @Resource
     private IRoleService roleService;
     @Resource
@@ -68,7 +68,7 @@ public class UserController {
     @PostMapping("/add")
     public RestResult<Object> createUser(@RequestBody UserDTO userDto) {
         Integer userId = userService.addUser(userDto);
-        int i = userRoleRelationService.addUserRoleRelation(userId, userDto.getRoleIds());
+        int i = roleUserRelationService.addUserRoleRelation(userId, userDto.getRoleIds());
         if (i == 0) {
             return RestResult.error("用户角色关联失败!");
         }
@@ -89,6 +89,7 @@ public class UserController {
     @Permission("user:delete")
     @Log("删除用户")
     @PostMapping("/delete")
+    @Transactional(rollbackFor = Exception.class)
     public RestResult<Object> removeUser(@RequestBody Collection<Integer> ids) {
         Integer i = userService.removeUser(ids);
         if (i == 0) {
@@ -129,22 +130,6 @@ public class UserController {
         boolean bool = userService.changeEnable(userDTO.getId(), userDTO.getEnable());
         if (!bool) {
             return RestResult.error("操作失败!");
-        }
-        return RestResult.success(true);
-    }
-
-    @Permission("user:role")
-    @Log("编辑用户角色")
-    @PostMapping("/authRole")
-    @Transactional(rollbackFor = Exception.class)
-    public RestResult<Object> authRole(@RequestBody UserDTO userDTO) {
-        int i = userRoleRelationService.delRoleUserRelationByUser(userDTO.getId());
-        if (i == 0) {
-            return RestResult.error("角色更新失败!");
-        }
-        i = userRoleRelationService.addUserRoleRelation(userDTO.getId(), userDTO.getRoleIds());
-        if (i == 0) {
-            return RestResult.error("角色更新失败!");
         }
         return RestResult.success(true);
     }

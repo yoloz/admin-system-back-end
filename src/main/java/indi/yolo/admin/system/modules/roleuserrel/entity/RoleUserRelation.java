@@ -1,4 +1,4 @@
-package indi.yolo.admin.system.modules.user.entity;
+package indi.yolo.admin.system.modules.roleuserrel.entity;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
  * @author yoloz
  */
 @Data
-@Table(value = "user_role_rel")
+@Table(value = "role_user_rel")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRoleRelation {
+public class RoleUserRelation {
 
     @Id
-    private Integer userId;
-    @Id
     private Integer roleId;
+    @Id
+    private Integer userId;
 }

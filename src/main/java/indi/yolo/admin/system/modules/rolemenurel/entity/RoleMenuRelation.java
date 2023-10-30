@@ -1,4 +1,4 @@
-package indi.yolo.admin.system.modules.role.entity;
+package indi.yolo.admin.system.modules.rolemenurel.entity;
 
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;

@@ -4,8 +4,6 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 import indi.yolo.admin.system.modules.role.entity.Role;
 import indi.yolo.admin.system.modules.role.entity.RoleDTO;
-import indi.yolo.admin.system.modules.role.entity.RoleUserRelationDTO;
-import indi.yolo.admin.system.modules.user.entity.User;
 import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.Collection;
@@ -17,8 +15,6 @@ import java.util.List;
 public interface IRoleService extends IService<Role> {
 
     Page<Role> getRoleList(RoleDTO roleDTO);
-
-    Page<User> getUserByRole(RoleUserRelationDTO roleUserRelationDTO);
 
     Integer addRole(RoleDTO roleDTO);
 

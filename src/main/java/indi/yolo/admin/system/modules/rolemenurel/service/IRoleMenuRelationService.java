@@ -1,7 +1,7 @@
-package indi.yolo.admin.system.modules.role.service;
+package indi.yolo.admin.system.modules.rolemenurel.service;
 
 import com.mybatisflex.core.service.IService;
-import indi.yolo.admin.system.modules.role.entity.RoleMenuRelation;
+import indi.yolo.admin.system.modules.rolemenurel.entity.RoleMenuRelation;
 import org.springframework.cache.annotation.CacheEvict;
 
 import java.util.Collection;

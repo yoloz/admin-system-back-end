@@ -1,4 +1,4 @@
-package indi.yolo.admin.system.modules.role.entity;
+package indi.yolo.admin.system.modules.rolemenurel.entity;
 
 import indi.yolo.admin.system.commons.entity.base.BaseDTO;
 import lombok.Data;

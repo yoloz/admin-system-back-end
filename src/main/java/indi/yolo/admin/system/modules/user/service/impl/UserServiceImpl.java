@@ -7,17 +7,17 @@ import com.mybatisflex.core.row.Db;
 import com.mybatisflex.core.row.Row;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
+import indi.yolo.admin.system.modules.menu.entity.table.MenuTableDef;
+import indi.yolo.admin.system.modules.role.entity.table.RoleTableDef;
+import indi.yolo.admin.system.modules.rolemenurel.entity.table.RoleMenuRelationTableDef;
+import indi.yolo.admin.system.modules.roleuserrel.entity.table.RoleUserRelationTableDef;
 import indi.yolo.admin.system.modules.user.entity.User;
 import indi.yolo.admin.system.modules.user.entity.UserDTO;
 import indi.yolo.admin.system.modules.user.entity.UserVO;
+import indi.yolo.admin.system.modules.user.entity.table.UserTableDef;
 import indi.yolo.admin.system.modules.user.mapper.UserMapper;
 import indi.yolo.admin.system.modules.user.mapstruct.UserMapStruct;
 import indi.yolo.admin.system.modules.user.service.IUserService;
-import indi.yolo.admin.system.modules.menu.entity.table.MenuTableDef;
-import indi.yolo.admin.system.modules.role.entity.table.RoleMenuRelationTableDef;
-import indi.yolo.admin.system.modules.role.entity.table.RoleTableDef;
-import indi.yolo.admin.system.modules.user.entity.table.UserRoleRelationTableDef;
-import indi.yolo.admin.system.modules.user.entity.table.UserTableDef;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,10 +45,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper sql = QueryWrapper.create()
                 .select(UserTableDef.USER.ALL_COLUMNS, RoleTableDef.ROLE.ID, RoleTableDef.ROLE.NAME, RoleTableDef.ROLE.LEVEL)
                 .from(UserTableDef.USER.as("u"))
-                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur")
-                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                .leftJoin(RoleUserRelationTableDef.ROLE_USER_RELATION).as("ur")
+                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.USERNAME.like(userDto.getUsername())).and(UserTableDef.USER.ENABLE.eq(userDto.getEnable()))
-                .leftJoin(RoleTableDef.ROLE).as("r").on(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .leftJoin(RoleTableDef.ROLE).as("r").on(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         return userMapper.paginateAs(Page.of(userDto.getPageNumber(), userDto.getPageSize(), userDto.getTotalRow()), sql, UserVO.class);
     }
 
@@ -108,11 +108,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .select(UserTableDef.USER.ID, UserTableDef.USER.USERNAME, UserTableDef.USER.NICKNAME,
                         UserTableDef.USER.PHONE, UserTableDef.USER.EMAIL, UserTableDef.USER.ENABLE,
                         RoleTableDef.ROLE.LEVEL).from(UserTableDef.USER.as("u"))
-                .leftJoin(UserRoleRelationTableDef.USER_ROLE_RELATION).as("ur")
-                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                .leftJoin(RoleUserRelationTableDef.ROLE_USER_RELATION).as("ur")
+                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.ID.eq(userId))
                 .leftJoin(RoleTableDef.ROLE).as("r")
-                .on(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         List<Row> list = Db.selectListByQuery(sql);
         if (list == null || list.isEmpty()) {
             return Optional.empty();
@@ -132,9 +132,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                         select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID))
                                 .from(RoleMenuRelationTableDef.ROLE_MENU_RELATION)
                                 .where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
-                                        QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID)
-                                                .from(UserRoleRelationTableDef.USER_ROLE_RELATION)
-                                                .where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
+                                        QueryMethods.select(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID)
+                                                .from(RoleUserRelationTableDef.ROLE_USER_RELATION)
+                                                .where(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(userId))
                                 ))
                 ));
         return userMapper.selectListByQueryAs(sql, String.class);

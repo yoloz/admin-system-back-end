@@ -5,23 +5,23 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import indi.yolo.admin.system.modules.menu.entity.Menu;
 import indi.yolo.admin.system.modules.menu.entity.MenuDTO;
-import indi.yolo.admin.system.modules.menu.entity.MenuVO;
 import indi.yolo.admin.system.modules.menu.entity.MenuRouter;
+import indi.yolo.admin.system.modules.menu.entity.MenuVO;
+import indi.yolo.admin.system.modules.menu.entity.table.MenuTableDef;
 import indi.yolo.admin.system.modules.menu.mapper.MenuMapper;
 import indi.yolo.admin.system.modules.menu.mapstruct.MenuMapStructDTO;
 import indi.yolo.admin.system.modules.menu.mapstruct.MenuMapStructRouter;
 import indi.yolo.admin.system.modules.menu.mapstruct.MenuMapStructVO;
 import indi.yolo.admin.system.modules.menu.service.IMenuService;
-import indi.yolo.admin.system.modules.role.service.IRoleMenuRelationService;
-import indi.yolo.admin.system.modules.menu.entity.table.MenuTableDef;
-import indi.yolo.admin.system.modules.role.entity.table.RoleMenuRelationTableDef;
-import indi.yolo.admin.system.modules.user.entity.table.UserRoleRelationTableDef;
+import indi.yolo.admin.system.modules.rolemenurel.entity.table.RoleMenuRelationTableDef;
+import indi.yolo.admin.system.modules.roleuserrel.entity.table.RoleUserRelationTableDef;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 import static com.mybatisflex.core.query.QueryMethods.select;
+
 
 /**
  * @author yoloz
@@ -37,8 +37,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     private MenuMapStructVO menuMapStructVO;
     @Resource
     private MenuMapStructRouter menuMapStructRouter;
-    @Resource
-    private IRoleMenuRelationService roleMenuRelationService;
 
 
     @Override
@@ -65,9 +63,9 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
                 .from(MenuTableDef.MENU)
                 .where(MenuTableDef.MENU.ID.in(select(QueryMethods.distinct(RoleMenuRelationTableDef.ROLE_MENU_RELATION.MENU_ID))
                         .from(RoleMenuRelationTableDef.ROLE_MENU_RELATION).where(RoleMenuRelationTableDef.ROLE_MENU_RELATION.ROLE_ID.in(
-                                QueryMethods.select(UserRoleRelationTableDef.USER_ROLE_RELATION.ROLE_ID)
-                                        .from(UserRoleRelationTableDef.USER_ROLE_RELATION)
-                                        .where(UserRoleRelationTableDef.USER_ROLE_RELATION.USER_ID.eq(userId))
+                                QueryMethods.select(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID)
+                                        .from(RoleUserRelationTableDef.ROLE_USER_RELATION)
+                                        .where(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(userId))
                         ))
                 )).and(MenuTableDef.MENU.TYPE.ne(2)).orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
         List<Menu> menus = menuMapper.selectListByQuery(sql);

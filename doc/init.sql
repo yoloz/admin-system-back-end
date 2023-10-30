@@ -200,30 +200,30 @@ INSERT INTO `user`(`id`,`nickname`,`username`,`password`,`enable`,`builtin`,`pho
 UNLOCK TABLES;
 
 --
--- Table structure for table `user_role_rel`
+-- Table structure for table `role_user_rel`
 --
 
-DROP TABLE IF EXISTS `user_role_rel`;
+DROP TABLE IF EXISTS `role_user_rel`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user_role_rel` (
+CREATE TABLE `role_user_rel` (
   `user_id` int unsigned DEFAULT NULL,
   `role_id` int unsigned DEFAULT NULL,
-  KEY `user_role_rel_FK` (`user_id`),
-  KEY `user_role_rel_FK_1` (`role_id`),
-  CONSTRAINT `user_role_rel_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `user_role_rel_FK_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
+  KEY `role_user_rel_FK` (`user_id`),
+  KEY `role_user_rel_FK_1` (`role_id`),
+  CONSTRAINT `role_user_rel_FK` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `role_user_rel_FK_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user_role_rel`
+-- Dumping data for table `role_user_rel`
 --
 
-LOCK TABLES `user_role_rel` WRITE;
-/*!40000 ALTER TABLE `user_role_rel` DISABLE KEYS */;
-INSERT INTO `user_role_rel` VALUES (1,1);
-/*!40000 ALTER TABLE `user_role_rel` ENABLE KEYS */;
+LOCK TABLES `role_user_rel` WRITE;
+/*!40000 ALTER TABLE `role_user_rel` DISABLE KEYS */;
+INSERT INTO `role_user_rel` VALUES (1,1);
+/*!40000 ALTER TABLE `role_user_rel` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
