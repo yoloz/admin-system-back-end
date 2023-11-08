@@ -21,7 +21,7 @@ public class TaskPoolConfig {
         executor.setMaxPoolSize(10); //最大线程数
         executor.setQueueCapacity(200); //队列容量
         executor.setKeepAliveSeconds(60); //活跃时间
-        executor.setThreadNamePrefix("dsg-web-"); //线程名字前缀
+        executor.setThreadNamePrefix("admin-system-"); //线程名字前缀
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy()); //哪个线程调用了execute方法，那么这个线程来执行被拒绝的任务
         return executor;
     }
