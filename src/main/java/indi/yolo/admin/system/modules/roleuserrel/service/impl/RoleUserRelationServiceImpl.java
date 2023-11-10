@@ -47,9 +47,8 @@ public class RoleUserRelationServiceImpl extends ServiceImpl<RoleUserRelationMap
                 .from(UserTableDef.USER)
                 .where(UserTableDef.USER.ID.in(
                         QueryWrapper.create().select(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID)
-                                .from(RoleUserRelationTableDef.ROLE_USER_RELATION)
-                                .leftJoin(RoleTableDef.ROLE)
-                                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID))
+                                .from(RoleUserRelationTableDef.ROLE_USER_RELATION, RoleTableDef.ROLE)
+                                .where(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID))
                                 .and(RoleTableDef.ROLE.ID.eq(roleUserRelationDTO.getId()))
                 ));
         return userMapper.paginate(Page.of(roleUserRelationDTO.getPageNumber(), roleUserRelationDTO.getPageSize(),

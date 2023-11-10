@@ -44,11 +44,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public Page<UserVO> getUserList(UserDTO userDto) {
         QueryWrapper sql = QueryWrapper.create()
                 .select(UserTableDef.USER.ALL_COLUMNS, RoleTableDef.ROLE.ID, RoleTableDef.ROLE.NAME, RoleTableDef.ROLE.LEVEL)
-                .from(UserTableDef.USER.as("u"))
-                .leftJoin(RoleUserRelationTableDef.ROLE_USER_RELATION).as("ur")
-                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                .from(UserTableDef.USER, RoleUserRelationTableDef.ROLE_USER_RELATION, RoleTableDef.ROLE)
+                .where(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.USERNAME.like(userDto.getUsername())).and(UserTableDef.USER.ENABLE.eq(userDto.getEnable()))
-                .leftJoin(RoleTableDef.ROLE).as("r").on(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .and(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         return userMapper.paginateAs(Page.of(userDto.getPageNumber(), userDto.getPageSize(), userDto.getTotalRow()), sql, UserVO.class);
     }
 
@@ -107,12 +106,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         QueryWrapper sql = QueryWrapper.create()
                 .select(UserTableDef.USER.ID, UserTableDef.USER.USERNAME, UserTableDef.USER.NICKNAME,
                         UserTableDef.USER.PHONE, UserTableDef.USER.EMAIL, UserTableDef.USER.ENABLE,
-                        RoleTableDef.ROLE.LEVEL).from(UserTableDef.USER.as("u"))
-                .leftJoin(RoleUserRelationTableDef.ROLE_USER_RELATION).as("ur")
-                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
+                        RoleTableDef.ROLE.LEVEL)
+                .from(UserTableDef.USER, RoleUserRelationTableDef.ROLE_USER_RELATION, RoleTableDef.ROLE)
+                .where(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.ID.eq(userId))
-                .leftJoin(RoleTableDef.ROLE).as("r")
-                .on(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .and(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
         List<Row> list = Db.selectListByQuery(sql);
         if (list == null || list.isEmpty()) {
             return Optional.empty();
