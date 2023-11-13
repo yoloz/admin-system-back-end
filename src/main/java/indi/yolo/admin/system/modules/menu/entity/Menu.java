@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @Table(value = "menu")
-public class Menu extends BasePO {
+public class Menu {
 
     @Id(keyType = KeyType.Auto)
     private Integer id;
