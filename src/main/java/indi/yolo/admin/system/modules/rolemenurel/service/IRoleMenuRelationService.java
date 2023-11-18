@@ -11,10 +11,10 @@ import java.util.Collection;
  */
 public interface IRoleMenuRelationService extends IService<RoleMenuRelation> {
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int addRoleMenuRelation(Integer roleId, Collection<Integer> menuIds);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int delRoleMenuRelationByRole(Integer roleId);
 
     Collection<Integer> getMenuIdsByRole(Integer roleId);

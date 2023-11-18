@@ -24,7 +24,7 @@ public interface IMenuService extends IService<Menu> {
 
     int updateMenu(MenuDTO menuDTO);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int removeMenu(Collection<Integer> menuIds);
 
     //排除按钮及隐藏的菜单 [{id:"",name:"",children[...]},...]

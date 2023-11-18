@@ -20,7 +20,7 @@ public interface IRoleService extends IService<Role> {
 
     boolean updateRole(RoleDTO roleDTO);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     Integer removeRole(Collection<Integer> roleIds);
 
     //[{id:"",name:""},...]查询用户可选择的角色选项

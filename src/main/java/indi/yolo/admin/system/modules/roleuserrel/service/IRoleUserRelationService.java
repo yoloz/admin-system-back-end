@@ -16,13 +16,13 @@ public interface IRoleUserRelationService extends IService<RoleUserRelation> {
 
     Page<User> getUserByRole(RoleUserRelationDTO roleUserRelationDTO);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int addUserRoleRelation(Integer userId, Collection<Integer> roleIds);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int delRoleUserRelation(Integer roleId, Collection<Integer> userIds);
 
-    @CacheEvict(cacheNames = "permissions,routerMenus", allEntries = true)
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int delRoleUserRelationByUser(Integer userId);
 
 
