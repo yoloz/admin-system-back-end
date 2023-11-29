@@ -50,7 +50,8 @@ public class RoleUserRelationServiceImpl extends ServiceImpl<RoleUserRelationMap
                                 .from(RoleUserRelationTableDef.ROLE_USER_RELATION, RoleTableDef.ROLE)
                                 .where(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID))
                                 .and(RoleTableDef.ROLE.ID.eq(roleUserRelationDTO.getId()))
-                ));
+                ))
+                .orderBy(UserTableDef.USER.ID.desc());
         return userMapper.paginate(Page.of(roleUserRelationDTO.getPageNumber(), roleUserRelationDTO.getPageSize(),
                         roleUserRelationDTO.getTotalRow()), queryWrapper)
                 .map(u -> {

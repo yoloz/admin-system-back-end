@@ -47,7 +47,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                 .from(UserTableDef.USER, RoleUserRelationTableDef.ROLE_USER_RELATION, RoleTableDef.ROLE)
                 .where(RoleUserRelationTableDef.ROLE_USER_RELATION.USER_ID.eq(UserTableDef.USER.ID))
                 .and(UserTableDef.USER.USERNAME.like(userDto.getUsername())).and(UserTableDef.USER.ENABLE.eq(userDto.getEnable()))
-                .and(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID));
+                .and(RoleUserRelationTableDef.ROLE_USER_RELATION.ROLE_ID.eq(RoleTableDef.ROLE.ID))
+                .orderBy(UserTableDef.USER.ID.desc());
         return userMapper.paginateAs(Page.of(userDto.getPageNumber(), userDto.getPageSize(), userDto.getTotalRow()), sql, UserVO.class);
     }
 

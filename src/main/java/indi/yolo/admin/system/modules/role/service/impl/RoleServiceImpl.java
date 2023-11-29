@@ -39,7 +39,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IR
     @Override
     public Page<Role> getRoleList(RoleDTO roleDTO) {
         QueryWrapper sql = QueryWrapper.create().select(RoleTableDef.ROLE.DEFAULT_COLUMNS).from(RoleTableDef.ROLE)
-                .where(RoleTableDef.ROLE.NAME.like(roleDTO.getName()));
+                .where(RoleTableDef.ROLE.NAME.like(roleDTO.getName()))
+                .orderBy(RoleTableDef.ROLE.ID.desc());
         return roleMapper.paginate(Page.of(roleDTO.getPageNumber(), roleDTO.getPageSize(), roleDTO.getTotalRow()), sql);
     }
 
