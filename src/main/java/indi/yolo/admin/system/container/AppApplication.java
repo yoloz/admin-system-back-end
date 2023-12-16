@@ -9,12 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.nio.charset.StandardCharsets;
 
 
-@EnableAsync
 @EnableCaching
 @MapperScan("indi.yolo.admin.system.modules.*.mapper")
 @ComponentScan(basePackages = "indi.yolo.admin.system")

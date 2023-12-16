@@ -3,7 +3,6 @@ package indi.yolo.admin.system.modules.menu.entity;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-import indi.yolo.admin.system.commons.entity.base.BasePO;
 import lombok.Data;
 
 
