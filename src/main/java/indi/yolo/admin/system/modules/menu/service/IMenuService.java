@@ -20,8 +20,10 @@ public interface IMenuService extends IService<Menu> {
     @Cacheable(cacheNames = "routerMenus", key = "#userId")
     Collection<MenuRouter> getRouterMenu(Integer userId);
 
+    @CacheEvict(cacheNames = "routerMenus", allEntries = true)
     int addMenu(MenuDTO menuDTO);
 
+    @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)
     int updateMenu(MenuDTO menuDTO);
 
     @CacheEvict(cacheNames = {"permissions", "routerMenus"}, allEntries = true)

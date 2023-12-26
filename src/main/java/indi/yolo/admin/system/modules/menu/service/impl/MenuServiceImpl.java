@@ -46,12 +46,21 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
                 .orderBy(MenuTableDef.MENU.PID.asc(), MenuTableDef.MENU.ORDER.asc());
         List<Menu> menus = menuMapper.selectListByQuery(sql);
         List<MenuVO> menuVOS = new ArrayList<>();
+        //存在后续菜单变动，移到后面创建的父目录里，此时先前创建的按钮id值小，遍历中会找不到父菜单，故先将按钮资源缓存，最后再遍历放入父菜单里
+        List<Menu> buttonMenu = new ArrayList<>();
         for (Menu menu : menus) {
+            if (menu.getType() == 2) {
+                buttonMenu.add(menu);
+                continue;
+            }
             if (menu.getPid() == null || menu.getPid() == 0) {
                 menuVOS.add(menuMapStructVO.toVo(menu));
             } else {
                 packMenuVO(menuVOS, menu);
             }
+        }
+        for (Menu menu : buttonMenu) {
+            packMenuVO(menuVOS, menu);
         }
         return menuVOS;
     }
